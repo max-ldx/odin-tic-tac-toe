@@ -1,6 +1,13 @@
 const tokens = Object.freeze({ x: 'X', o: 'O' });
 
-const createPlayer = ({ name = '', token = '' } = {}) => Object.freeze({ name, token });
+const createPlayer = ({ name = '', token = '' } = {}) => {
+    let playerName = name;
+    return {
+        getName: () => playerName,
+        setName: newName => playerName = newName,
+        getToken: () => token,
+    }
+}
 
 const createGameController = (playerOne, playerTwo) => {
     const board = Array(9).fill(null);
@@ -14,7 +21,7 @@ const createGameController = (playerOne, playerTwo) => {
     const getCurrentPlayer = () => board.filter(e => e !== null).length % 2 === 0 ? playerOne : playerTwo;
 
     const checkWinner = player => {
-        if (WIN_LINES.some(line => line.every(i => board[i] === player.token))) {
+        if (WIN_LINES.some(line => line.every(i => board[i] === player.getToken()))) {
             winner = player;
         }
     };
@@ -23,7 +30,7 @@ const createGameController = (playerOne, playerTwo) => {
         if (winner || position < 0 || position >= board.length || board[position]) return;
 
         const player = getCurrentPlayer();
-        board[position] = player.token;
+        board[position] = player.getToken();
         checkWinner(player);
     };
 
@@ -41,3 +48,49 @@ const createGameController = (playerOne, playerTwo) => {
         hasRoundsLeft: () => board.some(e => e === null)
     });
 };
+
+const createDisplayController = (document, gameController) => {
+    const boardElement = document.querySelector('.gameboard');
+    const resultElement = document.querySelector('.result');
+
+    const renderBoard = () => {
+        boardElement.textContent = null;
+        const board = gameController.getBoard();
+        const currentPlayer = gameController.getCurrentPlayer();
+        const winner = gameController.getWinner();
+
+        if (winner) {
+            resultElement.textContent = `${winner.getName()} wins!`;
+        } else if (!gameController.hasRoundsLeft()) {
+            resultElement.textContent = 'Tie!';
+        } else {
+            resultElement.textContent = `${currentPlayer.getName()}'s turn`;
+        }
+
+        for (let i = 0; i < board.length; i++) {
+            const buttonElement = document.createElement('button');
+            buttonElement.textContent = board[i];
+            buttonElement.addEventListener('click', _ => {
+                gameController.playRound(i);
+                renderBoard();
+            });
+            boardElement.appendChild(buttonElement);
+        }
+    }
+
+    const setupResetGame = () => {
+        const resetButton = document.querySelector('.reset');
+        resetButton.addEventListener('click', _ => {
+            gameController.resetGame();
+            renderBoard();
+        });
+    }
+
+    setupResetGame();
+    renderBoard();
+}
+
+const playerOne = createPlayer({ name: 'Player One', token: tokens.x });
+const playerTwo = createPlayer({ name: 'Player Two', token: tokens.o });
+const gameController = createGameController(playerOne, playerTwo);
+const displayController = createDisplayController(document, gameController);
