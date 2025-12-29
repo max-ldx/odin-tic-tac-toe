@@ -12,10 +12,28 @@
 <body>
     <h1>Tic Tac Toe</h1>
     <div>
+        <button class="edit-players">Edit players</button>
         <button class="reset">Start new game</button>
     </div>
     <div class="result"></div>
     <div class="gameboard"></div>
+    <dialog class="dialog">
+        <div>
+            <p>Edit players</p>
+            <button class="dialog-close">Close</button>
+        </div>
+        <form id="players-form">
+            <div>
+                <label for="player-one">Player One</label>
+                <input type="text" id="player-one" name="player-two" required>
+            </div>
+            <div>
+                <label for="player-two">Player Two</label>
+                <input type="text" id="player-two" name="player-two" required>
+            </div>
+            <button type="submit">Edit</button>
+        </form>
+    </dialog>
 </body>
 
 </html>

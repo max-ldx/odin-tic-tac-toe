@@ -1,15 +1,15 @@
 const tokens = Object.freeze({ x: 'X', o: 'O' });
 
-const createPlayer = ({ name = '', token = '' } = {}) => {
+function createPlayer({ name = '', token = '' } = {}) {
     let playerName = name;
     return {
         getName: () => playerName,
         setName: newName => playerName = newName,
         getToken: () => token,
-    }
+    };
 }
 
-const createGameController = (playerOne, playerTwo) => {
+function createGameController(playerOne, playerTwo) {
     const board = Array(9).fill(null);
     const WIN_LINES = [
         [0, 1, 2], [3, 4, 5], [6, 7, 8],
@@ -18,42 +18,55 @@ const createGameController = (playerOne, playerTwo) => {
     ];
     let winner = null;
 
-    const getCurrentPlayer = () => board.filter(e => e !== null).length % 2 === 0 ? playerOne : playerTwo;
+    function getCurrentPlayer() {
+        return board.filter(e => e !== null).length % 2 === 0 ? playerOne : playerTwo;
+    }
 
-    const checkWinner = player => {
+    function checkWinner(player) {
         if (WIN_LINES.some(line => line.every(i => board[i] === player.getToken()))) {
             winner = player;
         }
-    };
+    }
 
-    const playRound = position => {
+    function playRound(position) {
         if (winner || position < 0 || position >= board.length || board[position]) return;
 
         const player = getCurrentPlayer();
         board[position] = player.getToken();
         checkWinner(player);
-    };
+    }
 
-    const resetGame = () => {
+    function resetGame() {
         board.fill(null);
         winner = null;
-    };
+    }
+
+    function getPlayers() {
+        return { playerOne, playerTwo };
+    }
+
+    function setPlayersNames(nameOne, nameTwo) {
+        playerOne.setName(nameOne);
+        playerTwo.setName(nameTwo);
+    }
 
     return Object.freeze({
         playRound,
         getCurrentPlayer,
+        getPlayers,
+        setPlayersNames,
         resetGame,
-        getBoard: () => [...board],
-        getWinner: () => winner,
-        hasRoundsLeft: () => board.some(e => e === null)
+        getBoard: () => Object.freeze([...board]),
+        getWinner: () => Object.freeze(winner),
+        isGameOnGoing: () => board.some(e => e === null)
     });
-};
+}
 
-const createDisplayController = (document, gameController) => {
+function createDisplayController(document, gameController) {
     const boardElement = document.querySelector('.gameboard');
     const resultElement = document.querySelector('.result');
 
-    const renderBoard = () => {
+    function renderBoard() {
         boardElement.textContent = null;
         const board = gameController.getBoard();
         const currentPlayer = gameController.getCurrentPlayer();
@@ -61,7 +74,7 @@ const createDisplayController = (document, gameController) => {
 
         if (winner) {
             resultElement.textContent = `${winner.getName()} wins!`;
-        } else if (!gameController.hasRoundsLeft()) {
+        } else if (!gameController.isGameOnGoing()) {
             resultElement.textContent = 'Tie!';
         } else {
             resultElement.textContent = `${currentPlayer.getName()}'s turn`;
@@ -78,7 +91,7 @@ const createDisplayController = (document, gameController) => {
         }
     }
 
-    const setupResetGame = () => {
+    function setupResetGame() {
         const resetButton = document.querySelector('.reset');
         resetButton.addEventListener('click', _ => {
             gameController.resetGame();
@@ -86,6 +99,41 @@ const createDisplayController = (document, gameController) => {
         });
     }
 
+    function setupEditPlayersDialog() {
+        const editPlayersElement = document.querySelector('.edit-players');
+        const dialogElement = document.querySelector('.dialog');
+        const playerOneField = document.querySelector('#player-one');
+        const playerTwoField = document.querySelector('#player-two');
+        editPlayersElement.addEventListener('click', _ => {
+            const players = gameController.getPlayers();
+            playerOneField.value = players.playerOne.getName();
+            playerTwoField.value = players.playerTwo.getName();
+            dialogElement.showModal();
+        });
+    }
+
+    function setupDialogClose() {
+        const closeDialogButtonElement = document.querySelector('.dialog-close');
+        const dialogElement = document.querySelector('.dialog');
+        closeDialogButtonElement.addEventListener('click', _ => dialogElement.close());
+    }
+
+    function setupEditPlayersName() {
+        const dialogElement = document.querySelector('.dialog');
+        const dialogFormElement = document.querySelector('#players-form');
+        const playerOneField = document.querySelector('#player-one');
+        const playerTwoField = document.querySelector('#player-two');
+        dialogFormElement.addEventListener('submit', e => {
+            e.preventDefault();
+            gameController.setPlayersNames(playerOneField.value, playerTwoField.value);
+            dialogElement.close();
+            renderBoard();
+        });
+    }
+
+    setupEditPlayersDialog();
+    setupDialogClose();
+    setupEditPlayersName();
     setupResetGame();
     renderBoard();
 }

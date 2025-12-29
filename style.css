@@ -11,3 +11,29 @@ body {
     grid-template-columns: repeat(3, 100px);
     grid-template-rows: repeat(3, 100px);
 }
+
+dialog>div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+dialog>form {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+dialog>div>p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+dialog>form>div {
+    display: grid;
+    grid-template-columns: 1fr 10rem;
+    gap: .5rem;
+}
