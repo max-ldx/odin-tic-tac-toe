@@ -1,12 +1,11 @@
-const tokens = (() => {
-    return {
-        X: "X",
-        O: "O"
-    };
-})();
+const Tokens = Object.freeze({
+    X: "X",
+    O: "O"
+});
 
 function createPlayer(name, token) {
     const getName = () => name;
+
     const getToken = () => token;
 
     return {
@@ -40,8 +39,8 @@ const gameboard = (() => {
     }
 })();
 
-const player1 = createPlayer("Player 1", tokens.X);
-const player2 = createPlayer("Player 2", tokens.O);
+const player1 = createPlayer("Player 1", Tokens.X);
+const player2 = createPlayer("Player 2", Tokens.O);
 
 function createGameController(player1, player2, gameboard) {
     const winPositions = [
@@ -59,6 +58,7 @@ function createGameController(player1, player2, gameboard) {
 
     const checkHasWinner = () => {
         const board = gameboard.getBoard();
+
         for (const winPosition of winPositions) {
             if (board[winPosition[0]] !== null &&
                 board[winPosition[0]] === board[winPosition[1]] &&
@@ -66,6 +66,7 @@ function createGameController(player1, player2, gameboard) {
                 return true;
             }
         }
+
         return false;
     }
 
