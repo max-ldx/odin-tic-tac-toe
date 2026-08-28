@@ -1,6 +1,132 @@
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+*:not(dialog) {
+    margin: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        interpolate-size: allow-keywords;
+    }
+}
+
+body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+p {
+    text-wrap: pretty;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-wrap: balance;
+}
+
+/* Styling */
+
+:root {
+    font-weight: 300;
+    font-family: 'Geist', sans-serif;
+    --color-black: oklch(0 0 0);
+    --color-white: oklch(1 0 0);
+    --color-gray: oklch(96.7% 0.003 264.542);
+    --radius: 4px;
+}
+
+h1,
+.cell {
+    font-weight: 900;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    background: var(--color-gray);
+}
+
+.players-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.start-game-button,
+.restart-btn {
+    border: none;
+    border-radius: var(--radius);
+    background: var(--color-black);
+    color: var(--color-white);
+    padding: 1rem 4rem;
+}
+
+.start-game-button:disabled,
+.cell:disabled {
+    opacity: 0.7;
+}
+
+.form-group {
+    display: grid;
+    grid-template-columns: auto 15rem;
+    gap: .5rem;
+    align-items: center;
+}
+
 .board-container {
     width: 20rem;
     height: 20rem;
     display: grid;
     grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+    gap: .2rem;
+}
+
+.cell {
+    border: 1px solid var(--color-black);
+    border-radius: var(--radius);
+    background: var(--color-white);
+    color: var(--color-black);
 }

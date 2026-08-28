@@ -7,19 +7,22 @@
     <title>Tic Tac Toe | Maximilien Ledoux</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=geist:300,900" rel="stylesheet" />
 </head>
 
 <body>
+    <h1>Tic Tac Toe</h1>
     <form action="#" method="post" class="players-form">
-        <p>
+        <p class="form-group">
             <label for="player1">Player one name* :</label>
             <input type="text" name="player1" id="player1" required>
         </p>
-        <p>
+        <p class="form-group">
             <label for="player2">Player two name* :</label>
             <input type="text" name="player2" id="player2" required>
         </p>
-        <button type="submit">Start game</button>
+        <button type="submit" class="start-game-button">Start game</button>
     </form>
 
     <div class="board-container"></div>
