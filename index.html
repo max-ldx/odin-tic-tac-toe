@@ -10,7 +10,22 @@
 </head>
 
 <body>
+    <form action="#" method="post" class="players-form">
+        <p>
+            <label for="player1">Player one name* :</label>
+            <input type="text" name="player1" id="player1" required>
+        </p>
+        <p>
+            <label for="player2">Player two name* :</label>
+            <input type="text" name="player2" id="player2" required>
+        </p>
+        <button type="submit">Start game</button>
+    </form>
+
     <div class="board-container"></div>
+    <div class="game-status"></div>
+
+    <button type="button" class="restart-btn" style="display: none;">Play again</button>
 </body>
 
 </html>
